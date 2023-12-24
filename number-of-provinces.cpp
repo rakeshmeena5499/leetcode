@@ -39,13 +39,13 @@ class DisjointSet{
         int vParent = findParent(v);
         if(uParent == vParent)
             return;
-        if(rank[uParent] < rank[vParent]){
+        if(size[uParent] < size[vParent]){
             parent[uParent] = vParent;
             size[vParent] += size[uParent];
         }
         else{
             parent[vParent] = uParent;
-            size[uParent] += vParent;
+            size[uParent] += size[vParent];
         }
     }
 };

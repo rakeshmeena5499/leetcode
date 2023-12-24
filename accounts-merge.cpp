@@ -51,27 +51,43 @@ class DisjointSet{
 };
 
 class Solution {
-  public:
-    int Solve(int n, vector<vector<int>>& edge) {
-        int extraEdges = 0;
-        int numberOfComponents = 0;
+public:
+    vector<vector<string>> accountsMerge(vector<vector<string>>& accounts) {
+        int n = accounts.size();
         DisjointSet ds(n);
-        for(auto it : edge){
-            int u = it[0];
-            int v = it[1];
-            if(ds.findParent(u) != ds.findParent(v)){
-                ds.unionBySize(u, v);
-            }
-            else{
-                extraEdges++;
+        unordered_map<string, int> mailMap;
+        for(int i=0;i<n;i++){
+            for(int j=1;j<accounts[i].size();j++){
+                string mail = accounts[i][j];
+                if(mailMap.find(mail) == mailMap.end()){
+                    mailMap[mail] = i;
+                }
+                else{
+                    ds.unionBySize(i, mailMap[mail]);
+                }
             }
         }
 
-        for(int i=0;i<n;i++){
-            if(ds.findParent(i) == i){
-                numberOfComponents++;
-            }
+        vector<string> mergedMail[n];
+        for(auto it : mailMap){
+            string mail = it.first;
+            int node = ds.findParent(it.second);
+            mergedMail[node].push_back(mail);
         }
-        return (extraEdges>=numberOfComponents-1) ? numberOfComponents-1 : -1;
+
+        vector<vector<string>> ans;
+        for(int i=0;i<n;i++){
+            if(mergedMail[i].size() == 0){
+                continue;
+            }
+            sort(mergedMail[i].begin(), mergedMail[i].end());
+            vector<string> temp;
+            temp.push_back(accounts[i][0]);
+            for(auto it : mergedMail[i]){
+                temp.push_back(it);
+            }
+            ans.push_back(temp);
+        }
+        return ans;
     }
 };

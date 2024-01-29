@@ -12,8 +12,8 @@ public:
             int curr = s[i] - 'a';
             if(seen[curr])
                 continue;
-            while(!st.empty() && st.top() > curr && i < lastIndex[st.top()]){
-                seen[st.top()] = 0;
+            while(!st.empty() && st.top() > curr && i < lastIndex[st.top()]){   // Keep the char in stack if its not in gonna
+                seen[st.top()] = 0;                                             // come further down the array
                 st.pop();
             }
             st.push(curr);
